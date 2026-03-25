@@ -18,23 +18,23 @@ if (isset($_POST['vendi'])) {
     $idCliente = $_POST['cliente'];
 
     // prezzo attuale
-    $res = $conn->query("SELECT prezzo FROM prezzo WHERE idProdotto = $idProdotto ORDER BY dataInizio DESC LIMIT 1");
+    $res = $conn->query("SELECT prezzo FROM Prezzi WHERE idProdotto = $idProdotto ORDER BY dataInizio DESC LIMIT 1");
     $prezzo = $res->fetch_assoc()['prezzo'];
 
     $totale = $prezzo * $quantita;
 
     // inserisci acquisto
-    $conn->query("INSERT INTO acquisto (idCliente, dataAcquisto, totaleCalcolato, totalePagato)
+    $conn->query("INSERT INTO Acquisti (idCliente, dataAcquisto, totaleCalcolato, totalePagato)
                   VALUES ($idCliente, NOW(), $totale, $totale)");
 
     $idAcquisto = $conn->insert_id;
 
     // dettaglio
-    $conn->query("INSERT INTO dettaglio_acquisto (idAcquisto, idProdotto, quantita, prezzoUnitario)
+    $conn->query("INSERT INTO Dettaglio_acquisto (idAcquisto, idProdotto, quantita, prezzoUnitario)
                   VALUES ($idAcquisto, $idProdotto, $quantita, $prezzo)");
 
     // aggiorna giacenza
-    $conn->query("UPDATE prodotto
+    $conn->query("UPDATE Prodotti
                   SET giacenza = giacenza - $quantita
                   WHERE idProdotto = $idProdotto");
 

@@ -17,15 +17,21 @@
         <option value="litro">Litro</option>
     </select><br>
     Giacenza: <input type="number" step="0.01" name="giacenza"><br>
-    ID Categoria: <input type="number" name="categoria"><br>
+    Categoria: <input type="string" name="categoria"><br>
 
     <button type="submit" name="add">Inserisci</button>
 </form>
 
 <?php
 if (isset($_POST['add'])) {
-    $sql = "INSERT INTO prodotto (nome, tipo, unitaMisura, giacenza, idCategoria)
-            VALUES ('{$_POST['nome']}', '{$_POST['tipo']}', '{$_POST['unita']}', {$_POST['giacenza']}, {$_POST['categoria']})";
+    $sql = "INSERT INTO Prodotti (nome, tipo, unitaMisura, giacenza, categoria)
+        VALUES (
+            '{$_POST['nome']}', 
+            '{$_POST['tipo']}', 
+            '{$_POST['unita']}', 
+            {$_POST['giacenza']}, 
+            '{$_POST['categoria']}'
+        )";
 
     $conn->query($sql);
 }
@@ -34,9 +40,9 @@ if (isset($_POST['add'])) {
 <h2>Lista Prodotti</h2>
 
 <?php
-$res = $conn->query("SELECT * FROM prodotto");
+$res = $conn->query("SELECT * FROM Prodotti");
 
 while ($row = $res->fetch_assoc()) {
-    echo "{$row['nome']} - Giacenza: {$row['giacenza']}<br>";
+    echo "{$row['nome']} - Giacenza: {$row['giacenza']} {$row['unitaMisura']}<br>";
 }
 ?>
