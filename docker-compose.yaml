@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_agricola
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: azienda_agricola
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - aziendaNetwork
+
+  web:
+    build: .
+    container_name: azienda-web
+    ports:
+      - "9085:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    networks:
+      - aziendaNetwork
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: azienda-phpmyadmin
+    restart: always
+    ports:
+      - "9084:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - aziendaNetwork
+
+volumes:
+  db_data:
+
+networks:
+  aziendaNetwork:
+    driver: bridge
