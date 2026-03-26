@@ -77,7 +77,7 @@ if (isset($_POST['lavora'])) {
     $prezzoLavorato = $_POST['prezzoLavorato'];
 
     if (empty($prezzoLavorato) || $prezzoLavorato <= 0) {
-        die("❌ Inserire un prezzo valido per il prodotto lavorato.");
+        die("Inserire un prezzo valido per il prodotto lavorato.");
     }
 
     $luogo = 1; // Sempre azienda
@@ -86,7 +86,7 @@ if (isset($_POST['lavora'])) {
     $res = $conn->query("SELECT nome, giacenza, unitaMisura FROM Prodotti WHERE idProdotto = $input");
     $prodotto = $res->fetch_assoc();
     if (!$prodotto) die("Prodotto non trovato!");
-    if ($prodotto['giacenza'] < $quantitaUsata) die("❌ Giacenza insufficiente!");
+    if ($prodotto['giacenza'] < $quantitaUsata) die("Giacenza insufficiente!");
 
     // Recupera nome della lavorazione
     $resTipo = $conn->query("SELECT tipo FROM Tipi WHERE idTipo = $tipoLavorazione");
@@ -123,7 +123,7 @@ if (isset($_POST['lavora'])) {
         if ($resPrezzo->num_rows > 0) {
             $prezzoCorrente = $resPrezzo->fetch_assoc()['prezzo'];
             if ($prezzoCorrente != $prezzoLavorato) {
-                die("❌ Il prodotto lavorato esiste già con un prezzo diverso (€$prezzoCorrente). Modificare prima il prezzo nella sezione apposita.");
+                die("Il prodotto lavorato esiste già con un prezzo diverso (€$prezzoCorrente). Modificare prima il prezzo nella sezione apposita.");
             }
         }
 
@@ -159,7 +159,7 @@ if (isset($_POST['lavora'])) {
     // Aggiorna giacenza prodotto originale
     $conn->query("UPDATE Prodotti SET giacenza = giacenza - $quantitaUsata WHERE idProdotto = $input");
 
-    echo "✅ Lavorazione completata: $nomeOutput creata/aggiornata con $quantitaUsata {$prodotto['unitaMisura']} e prezzo €$prezzoLavorato";
+    echo "Lavorazione completata: $nomeOutput creata/aggiornata con $quantitaUsata {$prodotto['unitaMisura']} e prezzo €$prezzoLavorato";
 }
 ?>
 

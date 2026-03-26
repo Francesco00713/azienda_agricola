@@ -8,8 +8,8 @@
 <body>
     <h1>Area clienti</h1>
     <ul>
-        <li><a href="clienti.php">➕ Registrati</a></li>
-        <li><a href="acquisti.php">🛒 Acquista prodotti</a></li>
+        <li><a href="clienti.php">Registrati</a></li>
+        <li><a href="acquisti.php">Acquista prodotti</a></li>
     </ul>
     <a href="index.php">⬅ Torna alla home page</a>
 </body>

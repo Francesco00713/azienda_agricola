@@ -10,11 +10,11 @@
     <h2>Chi sei?</h2>
 
     <a href="index_gestore.php">
-    <button>👨‍🌾 Gestore aziendale</button>
+    <button>Gestore aziendale</button>
     </a>
 
     <a href="index_cliente.php">
-    <button>🛒 Cliente</button>
+    <button>Cliente</button>
     </a>
 </body>
 </html>

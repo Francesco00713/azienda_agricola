@@ -9,7 +9,6 @@
     Seleziona prodotto:
     <select name="prodottoUpdate" required>
         <?php
-        // Recupera prodotti con prezzo attuale
         $resProd = $conn->query("
             SELECT p.idProdotto, p.nome 
             FROM Prodotti p
@@ -45,9 +44,9 @@ if (isset($_POST['updatePrezzo'])) {
         $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                       VALUES ($idProdotto, $nuovoPrezzo, '$dataFine', NULL)");
 
-        echo "<p>✅ Prezzo aggiornato correttamente!</p>";
+        echo "<p>Prezzo aggiornato correttamente!</p>";
     } else {
-        echo "<p>❌ Nessun prezzo attuale trovato per questo prodotto.</p>";
+        echo "<p>Nessun prezzo attuale trovato per questo prodotto.</p>";
     }
 }
 ?>

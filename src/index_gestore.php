@@ -9,9 +9,9 @@
     <h1>Area Gestore aziendale</h1>
 
     <ul>
-        <li><a href="prodotti.php">➕ Aggiungi prodotto</a></li>
-        <li><a href="lavorazioni.php">⚙️ Gestione lavorazioni</a></li>
-        <li><a href="gestione_prezzi.php">✏️ Gestione prezzi</a></li>
+        <li><a href="prodotti.php">Aggiungi prodotto</a></li>
+        <li><a href="lavorazioni.php">Gestione lavorazioni</a></li>
+        <li><a href="gestione_prezzi.php">Gestione prezzi</a></li>
         <li><a href="visualizza_clienti.php">I nostri clienti</a></li>
     </ul>
 

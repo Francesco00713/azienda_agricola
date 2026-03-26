@@ -56,9 +56,9 @@ if (isset($_POST['add'])) {
         $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                       VALUES ($idProdotto, $prezzo, NOW(), NULL)");
 
-        echo "<p>✅ Prodotto e prezzo iniziale aggiunti con successo!</p>";
+        echo "<p>Prodotto e prezzo iniziale aggiunti con successo!</p>";
     } else {
-        echo "<p>❌ Errore: " . $conn->error . "</p>";
+        echo "<p>Errore: " . $conn->error . "</p>";
     }
 }
 ?>
