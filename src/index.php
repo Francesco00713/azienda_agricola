@@ -1,7 +1,20 @@
-<h1>Gestionale Azienda Agricola</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home-Page</title>
+</head>
+<body>
+    <h1>Azienda agricola: DA FRANCO E NICK</h1>
+    <h2>Chi sei?</h2>
 
-<ul>
-    <li><a href="prodotti.php">Gestione Prodotti</a></li>
-    <li><a href="clienti.php">Gestione Clienti</a></li>
-    <li><a href="vendita.php">Nuova Vendita</a></li>
-</ul>
+    <a href="index_gestore.php">
+    <button>👨‍🌾 Gestore aziendale</button>
+    </a>
+
+    <a href="index_cliente.php">
+    <button>🛒 Cliente</button>
+    </a>
+</body>
+</html>

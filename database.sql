@@ -11,9 +11,9 @@ CREATE TABLE Clienti (
 CREATE TABLE Prodotti (
     idProdotto INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100),
-    tipo ENUM('fresco', 'riserva', 'confezionato'),
-    unitaMisura ENUM('kg', 'pezzo', 'litro'),
     giacenza DECIMAL(10,2),
+    unitaMisura ENUM('kg', 'pezzo', 'litro'),
+    tipo ENUM('fresco', 'riserva', 'confezionato'),
     categoria VARCHAR(100)
 );
 
@@ -94,3 +94,17 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+INSERT INTO Luoghi (nome, indirizzo)
+VALUES ('Azienda Agricola', 'Palo del Colle - Via Giotto 18');
+
+INSERT INTO Tipi (tipo) VALUES
+('Essiccazione'),
+('Spremitura'),
+('Macinazione'),
+('Fermentazione'),
+('Confezionamento'),
+('Produzione marmellata'),
+('Salatura'),
+('Affumicatura'),
+('Smallatura');
