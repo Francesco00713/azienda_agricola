@@ -1,11 +1,13 @@
 CREATE DATABASE IF NOT EXISTS azienda_agricola;
 USE azienda_agricola;
 
-CREATE TABLE Clienti (
-    idCliente INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Utenti (
+    idUtente INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100),
     telefono VARCHAR(15),
     email VARCHAR(150)
+    ruolo ENUM('cliente', 'gestore')
+    password VARCHAR(100),
 );
 
 CREATE TABLE Prodotti (
