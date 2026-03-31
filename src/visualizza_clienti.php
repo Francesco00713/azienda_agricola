@@ -1,32 +1,28 @@
 <?php include "db.php"; ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Elenco_clienti</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Elenco Clienti</title>
 </head>
 <body>
     <div class="container">
         <h2>Elenco Clienti</h2>
-
-        <table border="1" cellpadding="5" cellspacing="0">
+        <table>
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Telefono</th>
                 <th>Email</th>
             </tr>
-
         <?php
-        $res = $conn->query("SELECT * FROM Clienti ORDER BY idCliente ASC");
-
-        if ($res->num_rows > 0) {
+        $res = $conn->query("SELECT * FROM Utenti WHERE ruolo = 'cliente' ORDER BY idUtente ASC");
+        if ($res && $res->num_rows > 0) {
             while ($row = $res->fetch_assoc()) {
                 echo "<tr>
-                        <td>{$row['idCliente']}</td>
+                        <td>{$row['idUtente']}</td>
                         <td>{$row['nome']}</td>
                         <td>{$row['telefono']}</td>
                         <td>{$row['email']}</td>
@@ -37,9 +33,7 @@
         }
         ?>
         </table>
-
-        <br>
-        <a href="index_gestore.php">⬅ Torna alla home page gestore</a>
+        <br><a href="index_gestore.php" class="btn-link">⬅ Torna all'area gestori</a>
     </div>
 </body>
 </html>

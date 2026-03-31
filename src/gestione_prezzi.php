@@ -1,16 +1,16 @@
 <?php include "db.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Gestione_prezzi</title>
 </head>
 <body>
     <div class="container">
         <h2>Gestione Prezzi Prodotti</h2>
-
         <hr>
 
         <h3>Aggiorna Prezzo Prodotto</h3>
@@ -29,7 +29,6 @@
                 }
                 ?>
             </select><br><br>
-
             Nuovo prezzo: <input type="number" step="0.01" name="nuovoPrezzo" required><br><br>
             <button type="submit" name="updatePrezzo">Aggiorna Prezzo</button>
         </form>
@@ -40,16 +39,13 @@
             $nuovoPrezzo = $_POST['nuovoPrezzo'];
             $oggi = date('Y-m-d');
 
-            // Recupera prezzo attuale
             $resCurr = $conn->query("SELECT * FROM Prezzi WHERE idProdotto = $idProdotto AND dataFineValidita IS NULL");
             if ($resCurr->num_rows > 0) {
                 $rowCurr = $resCurr->fetch_assoc();
                 $dataFine = $oggi;
 
-                // Aggiorna dataFineValidita del prezzo corrente
                 $conn->query("UPDATE Prezzi SET dataFineValidita = '$dataFine' WHERE idPrezzo = {$rowCurr['idPrezzo']}");
 
-                // Inserisci nuovo prezzo con dataInizioValidita = dataFine del precedente
                 $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                             VALUES ($idProdotto, $nuovoPrezzo, '$dataFine', NULL)");
 
@@ -59,9 +55,7 @@
             }
         }
         ?>
-
         <hr>
-
         <h3>Storico Prezzi Prodotti</h3>
         <table border="1" cellpadding="5" cellspacing="0">
             <tr>
@@ -95,7 +89,7 @@
         </table>
 
         <br>
-        <a href="index_gestore.php">⬅ Torna alla home page gestore</a>
+        <a href="index_gestore.php">⬅ Torna all'area gestori</a>
     </div>
 </body>
 </html>

@@ -1,35 +1,28 @@
 <?php include "db.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Gestione_prodotti</title>
 </head>
 <body>
     <div class"container">
         <h2>Aggiungi Prodotto</h2>
-
         <form method="POST">
             Nome: <input type="text" name="nome" required><br>
-
             Tipo:
             <select name="tipo">
                 <option value="fresco">Fresco</option>
-                <option value="riserva">Riserva</option>
-                <option value="confezionato">Confezionato</option>
             </select><br>
-
             Unità:
             <select name="unita">
                 <option value="kg">Kg</option>
                 <option value="pezzo">Pezzo</option>
-                <option value="litro">Litro</option>
             </select><br>
-
             Giacenza: <input type="number" step="0.01" name="giacenza" required><br>
-
             Categoria:
             <select name="categoria" required>
                 <option value="frutta">Frutta</option>
@@ -37,11 +30,9 @@
                 <option value="ortaggio">Ortaggio</option>
                 <option value="agrume">Agrume</option>
                 <option value="legume">Legume</option>
-                <option value="spezie">Spezie</option>
+                <option value="spezie">Spezia</option>
             </select><br>
-
             Prezzo iniziale: <input type="number" step="0.01" name="prezzo" required><br>
-
             <button type="submit" name="add">Inserisci</button>
         </form>
 
@@ -55,16 +46,13 @@
             $categoria = $_POST['categoria'];
             $prezzo = $_POST['prezzo'];
 
-            // Inserimento prodotto
             $sql = "INSERT INTO Prodotti (nome, tipo, unitaMisura, giacenza, categoria)
                     VALUES ('$nome', '$tipo', '$unita', $giacenza, '$categoria')";
             if ($conn->query($sql)) {
                 $idProdotto = $conn->insert_id;
 
-                // Inserimento prezzo iniziale
                 $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                             VALUES ($idProdotto, $prezzo, NOW(), NULL)");
-
                 echo "<p>Prodotto e prezzo iniziale aggiunti con successo!</p>";
             } else {
                 echo "<p>Errore: " . $conn->error . "</p>";
@@ -73,7 +61,6 @@
         ?>
 
         <h2>Lista Prodotti</h2>
-
         <table border="1" cellpadding="5" cellspacing="0">
             <tr>
                 <th>ID</th>
@@ -93,7 +80,6 @@
             LEFT JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL
             ORDER BY p.idProdotto
         ");
-
         if ($res->num_rows > 0) {
             while ($row = $res->fetch_assoc()) {
                 $prezzo = $row['prezzo'] !== null ? "€{$row['prezzo']}" : "-";
@@ -112,9 +98,8 @@
         }
         ?>
         </table>
-
         <br>
-        <a href="index_gestore.php">⬅ Torna alla home page gestore</a>
+        <a href="index_gestore.php">⬅ Torna all'area gestori</a>
     </div>
 </body>
 </html>

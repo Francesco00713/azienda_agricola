@@ -1,16 +1,16 @@
 <?php include "db.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Gestione_lavorazioni</title>
 </head>
 <body>
     <div class="container">
         <h2>Esegui Lavorazione</h2>
-
         <form method="POST">
             <label>Seleziona prodotto da lavorare:</label><br>
             <select name="inputProdotto" required>
@@ -21,7 +21,6 @@
                 }
                 ?>
             </select><br><br>
-
             <label>Seleziona tipo di lavorazione:</label><br>
             <select name="tipoLavorazione" required>
                 <?php
@@ -31,18 +30,13 @@
                 }
                 ?>
             </select><br><br>
-
             Quantità da utilizzare: <input type="number" step="0.01" name="quantitaUsata" required><br><br>
-
             Prezzo prodotto lavorato: <input type="number" step="0.01" name="prezzoLavorato" required><br><br>
-
             <button type="submit" name="lavora">Esegui lavorazione</button>
         </form>
-
         <hr>
 
         <h2>Prodotti attualmente presenti</h2>
-
         <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>ID</th>
@@ -89,45 +83,55 @@
                 die("Inserire un prezzo valido per il prodotto lavorato.");
             }
 
-            $luogo = 1; // Sempre azienda
+            $luogo = 1;
 
-            // Recupera prodotto originale
             $res = $conn->query("SELECT nome, giacenza, unitaMisura FROM Prodotti WHERE idProdotto = $input");
             $prodotto = $res->fetch_assoc();
             if (!$prodotto) die("Prodotto non trovato!");
             if ($prodotto['giacenza'] < $quantitaUsata) die("Giacenza insufficiente!");
 
-            // Recupera nome della lavorazione
             $resTipo = $conn->query("SELECT tipo FROM Tipi WHERE idTipo = $tipoLavorazione");
             $tipoNome = $resTipo->fetch_assoc()['tipo'];
 
-            // Logica nomi e tipo prodotto lavorato
             if (strtolower($tipoNome) == "produzione marmellata") {
                 $nomeOutput = "Marmellata di " . $prodotto['nome'];
                 $tipoOutput = "confezionato";
             } elseif (strtolower($tipoNome) == "essiccazione") {
-                $nomeOutput = $prodotto['nome'] . " essiccate";
+                $nomeOutput = $prodotto['nome'] . " essiccati/e";
                 $tipoOutput = "riserva";
             } elseif (strtolower($tipoNome) == "fermentazione") {
                 if (strtolower($prodotto['nome']) == "uva") $nomeOutput = "Vino";
                 elseif (strtolower($prodotto['nome']) == "mela") $nomeOutput = "Sidro";
-                else $nomeOutput = $prodotto['nome'] . " fermentato";
+                else $nomeOutput = $prodotto['nome'] . " fermentati/e";
                 $tipoOutput = "confezionato";
             } elseif (strtolower($tipoNome) == "confezionamento") {
-                $nomeOutput = $prodotto['nome'] . " confezionato";
+                $nomeOutput = "Confezione di " . $prodotto['nome'];
                 $tipoOutput = "confezionato";
-            } else {
+            } elseif (strtolower($tipoNome) == "macinazione") {
+                $nomeOutput = $prodotto['nome'] . " macinati/e";
+                $tipoOutput = "riserva";
+            } elseif (strtolower($tipoNome) == "salatura") {
+                $nomeOutput = $prodotto['nome'] . " salati/e";
+                $tipoOutput = "riserva";
+            } elseif (strtolower($tipoNome) == "affumicatura") {
+                $nomeOutput = $prodotto['nome'] . " affumicati/e";
+                $tipoOutput = "riserva";
+            } elseif (strtolower($tipoNome) == "smallatura") {
+                $nomeOutput = $prodotto['nome'] . " smallati/e";
+                $tipoOutput = "riserva";
+            } elseif (strtolower($tipoNome) == "spremitura") {
+                $nomeOutput = "Spremuta di " . $prodotto['nome'];
+                $tipoOutput = "confezionato";
+            }else {
                 $nomeOutput = $prodotto['nome'] . " " . strtolower($tipoNome);
                 $tipoOutput = "riserva";
             }
 
-            // Controlla se il prodotto lavorato esiste già
             $resCheck = $conn->query("SELECT idProdotto, giacenza FROM Prodotti WHERE nome = '$nomeOutput' AND tipo = '$tipoOutput'");
             if ($resCheck->num_rows > 0) {
                 $rowOutput = $resCheck->fetch_assoc();
                 $idOutput = $rowOutput['idProdotto'];
 
-                // Controlla se il prezzo esistente è diverso
                 $resPrezzo = $conn->query("SELECT prezzo FROM Prezzi WHERE idProdotto = $idOutput AND dataFineValidita IS NULL");
                 if ($resPrezzo->num_rows > 0) {
                     $prezzoCorrente = $resPrezzo->fetch_assoc()['prezzo'];
@@ -136,36 +140,29 @@
                     }
                 }
 
-                // Aggiorna giacenza
                 $conn->query("UPDATE Prodotti SET giacenza = giacenza + $quantitaUsata WHERE idProdotto = $idOutput");
             } else {
-                // Inserisci nuovo prodotto lavorato
                 $conn->query("
                     INSERT INTO Prodotti (nome, tipo, unitaMisura, giacenza, categoria)
                     VALUES ('$nomeOutput', '$tipoOutput', '{$prodotto['unitaMisura']}', $quantitaUsata, 'prodotto lavorato')
                 ");
                 $idOutput = $conn->insert_id;
 
-                // Inserisci prezzo iniziale
                 $oggi = date('Y-m-d');
                 $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                             VALUES ($idOutput, $prezzoLavorato, '$oggi', NULL)");
             }
 
-            // Crea lavorazione
             $conn->query("INSERT INTO Lavorazioni (dataLavorazione, note, idLuogo, idTipo)
                         VALUES (NOW(), 'Lavorazione automatica', $luogo, $tipoLavorazione)");
             $idLavorazione = $conn->insert_id;
 
-            // Registra uso prodotto
             $conn->query("INSERT INTO usa (idProdotto, idLavorazione, quantitaUsata)
                         VALUES ($input, $idLavorazione, $quantitaUsata)");
 
-            // Registra produzione
             $conn->query("INSERT INTO produce (idProdotto, idLavorazione, quantitaProdotta)
                         VALUES ($idOutput, $idLavorazione, $quantitaUsata)");
 
-            // Aggiorna giacenza prodotto originale
             $conn->query("UPDATE Prodotti SET giacenza = giacenza - $quantitaUsata WHERE idProdotto = $input");
 
             echo "Lavorazione completata: $nomeOutput creata/aggiornata con $quantitaUsata {$prodotto['unitaMisura']} e prezzo €$prezzoLavorato";
@@ -173,7 +170,7 @@
         ?>
 
         <br>
-        <a href="index_gestore.php">⬅ Torna alla home page gestore</a>
+        <a href="index_gestore.php">⬅ Torna all'area gestori</a>
     </div>
 </body>
 </html>

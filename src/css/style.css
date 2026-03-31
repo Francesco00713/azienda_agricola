@@ -1,82 +1,81 @@
+/* RESET BASE */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Corpo pagina */
+/* BODY */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #ffffff);
     color: #333;
-    padding: 20px;
 }
 
-/* Titoli */
-h1, h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Container centrale */
+/* CONTAINER PRINCIPALE */
 .container {
     max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-/* Tabelle */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
+/* TITOLI */
+h1 {
     text-align: center;
+    margin-bottom: 20px;
+    color: #2e7d32;
 }
 
-table th {
-    background-color: #4CAF50;
-    color: white;
+h2, h3 {
+    margin-bottom: 15px;
+    color: #388e3c;
 }
 
-/* Form */
+/* FORM */
 form {
-    margin-top: 20px;
+    margin-bottom: 25px;
 }
 
+/* INPUT E SELECT */
 input, select {
     width: 100%;
-    padding: 8px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: 0.3s;
 }
 
-/* Bottoni */
+input:focus, select:focus {
+    border-color: #66bb6a;
+    outline: none;
+}
+
+/* BOTTONI */
 button {
-    padding: 10px 15px;
-    border: none;
-    background-color: #4CAF50;
+    background: linear-gradient(135deg, #66bb6a, #43a047);
     color: white;
-    border-radius: 5px;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background: linear-gradient(135deg, #43a047, #2e7d32);
 }
 
-/* Link */
+/* LINK */
 a {
     text-decoration: none;
-    color: #4CAF50;
+    color: #2e7d32;
     font-weight: bold;
 }
 
@@ -84,12 +83,83 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Menu */
-.nav {
-    text-align: center;
-    margin-bottom: 20px;
+/* TABELLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
 }
 
-.nav a {
-    margin: 0 10px;
+table th {
+    background-color: #66bb6a;
+    color: white;
+    padding: 10px;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+/* RIGHE ALTERNATE */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* HOVER RIGA */
+table tr:hover {
+    background-color: #e8f5e9;
+}
+
+/* MESSAGGI */
+.success {
+    color: green;
+    margin-bottom: 10px;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* HR */
+hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* CARD BOTTONI HOME */
+.home-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.home-buttons a {
+    flex: 1;
+}
+
+.home-buttons button {
+    width: 100%;
+}
+
+/* CARRELLO */
+.cart-summary {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .home-buttons {
+        flex-direction: column;
+    }
 }

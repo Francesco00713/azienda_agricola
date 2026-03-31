@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Home-Page_gestore</title>
 </head>
 <body>
@@ -17,7 +17,7 @@
             <li><a href="visualizza_clienti.php">I nostri clienti</a></li>
         </ul>
 
-        <a href="index.php">⬅ Torna alla home page</a>
+        <a href="index.php">⬅ Esci e torna alla home page</a>
     </div>
 </body>
 </html>
