@@ -8,31 +8,27 @@
 </head>
 <body>
     <div class="container">
-    <h1>Area Clienti</h1>
-    
-    <div class="menu-grid">
-        <div class="menu-card">
+        <h1>AREA CLIENTI</h1>
+        
+        <div class="home-buttons">
             <a href="acquisti.php">
-                <span style="display:block; font-size: 2rem; margin-bottom: 10px;">🛒</span>
-                Acquista Prodotti
+                <button>Acquista Prodotti</button>
             </a>
-        </div>
-        <div class="menu-card">
+
             <a href="carrello.php">
-                <span style="display:block; font-size: 2rem; margin-bottom: 10px;">🛍️</span>
-                Visualizza Carrello
+                <button>Visualizza Carrello</button>
             </a>
-        </div>
-        <div class="menu-card">
+
             <a href="storico_acquisti.php">
-                <span style="display:block; font-size: 2rem; margin-bottom: 10px;">📜</span>
-                Storico Acquisti
+                <button>Storico Acquisti</button>
             </a>
         </div>
+
+        <br>
+
+        <div style="text-align:center;">
+            <a href="index.php">⬅ Esci e torna alla home page</a>
+        </div>
     </div>
-    <div style="text-align:center;">
-        <a href="index.php" class="btn-link">⬅ Esci e torna alla home page</a>
-    </div>
-</div>
 </body>
 </html>

@@ -15,7 +15,7 @@
 
         <h3>Aggiorna Prezzo Prodotto</h3>
         <form method="POST">
-            Seleziona prodotto:
+            <label>Seleziona prodotto:</label>
             <select name="prodottoUpdate" required>
                 <?php
                 $resProd = $conn->query("
@@ -29,7 +29,10 @@
                 }
                 ?>
             </select><br><br>
-            Nuovo prezzo: <input type="number" step="0.01" name="nuovoPrezzo" required><br><br>
+
+            <label>Nuovo prezzo:</label>
+            <input type="number" step="0.01" name="nuovoPrezzo" required><br><br>
+
             <button type="submit" name="updatePrezzo">Aggiorna Prezzo</button>
         </form>
 
@@ -40,6 +43,7 @@
             $oggi = date('Y-m-d');
 
             $resCurr = $conn->query("SELECT * FROM Prezzi WHERE idProdotto = $idProdotto AND dataFineValidita IS NULL");
+
             if ($resCurr->num_rows > 0) {
                 $rowCurr = $resCurr->fetch_assoc();
                 $dataFine = $oggi;
@@ -49,21 +53,24 @@
                 $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita)
                             VALUES ($idProdotto, $nuovoPrezzo, '$dataFine', NULL)");
 
-                echo "<p>Prezzo aggiornato correttamente!</p>";
+                echo "<p class='success'>Prezzo aggiornato correttamente!</p>";
             } else {
-                echo "<p>Nessun prezzo attuale trovato per questo prodotto.</p>";
+                echo "<p class='error'>Nessun prezzo attuale trovato per questo prodotto.</p>";
             }
         }
         ?>
+
         <hr>
+
         <h3>Storico Prezzi Prodotti</h3>
-        <table border="1" cellpadding="5" cellspacing="0">
+        <table>
             <tr>
                 <th>Prodotto</th>
                 <th>Prezzo (€)</th>
                 <th>Data Inizio Validità</th>
                 <th>Data Fine Validità</th>
             </tr>
+
             <?php
             $res = $conn->query("
                 SELECT p.nome, pr.prezzo, pr.dataInizioValidita, pr.dataFineValidita
@@ -75,12 +82,13 @@
             if ($res->num_rows > 0) {
                 while ($row = $res->fetch_assoc()) {
                     $dataFine = $row['dataFineValidita'] ? $row['dataFineValidita'] : '-';
+
                     echo "<tr>
                             <td>{$row['nome']}</td>
                             <td>€{$row['prezzo']}</td>
                             <td>{$row['dataInizioValidita']}</td>
                             <td>$dataFine</td>
-                        </tr>";
+                          </tr>";
                 }
             } else {
                 echo "<tr><td colspan='4'>Nessun prezzo registrato</td></tr>";

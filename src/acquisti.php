@@ -36,15 +36,17 @@
         }
         ?>
     </select><br><br>
-    Quantità:
+
+    <label>Quantità:</label>
     <input type="number" step="0.01" name="quantita" required><br><br>
+
     <button type="submit" name="aggiungi">Aggiungi al carrello</button>
 </form>
 
 <hr>
 
 <h2>Prodotti disponibili</h2>
-<table border="1">
+<table>
 <tr>
     <th>Nome</th>
     <th>Giacenza</th>
@@ -77,14 +79,14 @@ if (isset($_POST['aggiungi'])) {
     $res = $conn->query("SELECT giacenza FROM Prodotti WHERE idProdotto = $prodotto");
 
     if ($res->num_rows == 0) {
-        echo "Prodotto non trovato!";
+        echo "<p class='error'>Prodotto non trovato!</p>";
         exit();
     }
 
     $row = $res->fetch_assoc();
 
     if ($row['giacenza'] < $quantita) {
-        echo "<p style='color:red;'>Quantità non disponibile!</p>";
+        echo "<p class='error'>Quantità non disponibile!</p>";
     } else {
         $check = $conn->query("
             SELECT * FROM Carrello 
@@ -104,13 +106,15 @@ if (isset($_POST['aggiungi'])) {
             ");
         }
 
-        echo "<p style='color:green;'>Prodotto aggiunto al carrello!</p>";
+        echo "<p class='success'>Prodotto aggiunto al carrello!</p>";
         echo "<a href='carrello.php'>Vai al carrello</a>";
     }
 }
 ?>
+
 <br><br>
 <a href="index_cliente.php">⬅ Torna all'area clienti</a>
+
 </div>
 </body>
 </html>

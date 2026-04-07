@@ -41,24 +41,33 @@
 </head>
 <body>
     <div class="container">
-    <h1>Benvenuto nell'Azienda Agricola</h1>
-    <p>Accedi per acquistare prodotti o gestire l'azienda.</p>
-    <hr>
-    <h2>Accesso</h2>
-    <form method="POST">
-        Email: <input type="text" name="emailLogin" required><br>
-        Password: <input type="password" name="passwordLogin" required><br><br>
-        <button type="submit" name="login">Accedi</button>
-    </form>
-    <?php
-    if (isset($erroreLogin)) {
-        echo "<p style='color:red;'>$erroreLogin</p>";
-    }
-    ?>
-    <br>
-    <p>Non sei registrato? 
-        <a href="registrazione.php">Clicca qui</a>
-    </p>
+        <h1>Benvenuto nell'Azienda Agricola</h1>
+        <p>Accedi per acquistare prodotti o gestire l'azienda.</p>
+
+        <hr>
+
+        <h2>Accesso</h2>
+        <form method="POST">
+            <label>Email:</label>
+            <input type="text" name="emailLogin" required>
+
+            <label>Password:</label>
+            <input type="password" name="passwordLogin" required><br><br>
+
+            <button type="submit" name="login">Accedi</button>
+        </form>
+
+        <?php
+        if (isset($erroreLogin)) {
+            echo "<p class='error'>$erroreLogin</p>";
+        }
+        ?>
+
+        <br>
+
+        <p>Non sei registrato? 
+            <a href="registrazione.php">Clicca qui</a>
+        </p>
     </div>
 </body>
 </html>

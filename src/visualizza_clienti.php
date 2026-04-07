@@ -9,7 +9,9 @@
 </head>
 <body>
     <div class="container">
+
         <h2>Elenco Clienti</h2>
+
         <table>
             <tr>
                 <th>ID</th>
@@ -17,8 +19,10 @@
                 <th>Telefono</th>
                 <th>Email</th>
             </tr>
+
         <?php
         $res = $conn->query("SELECT * FROM Utenti WHERE ruolo = 'cliente' ORDER BY idUtente ASC");
+
         if ($res && $res->num_rows > 0) {
             while ($row = $res->fetch_assoc()) {
                 echo "<tr>
@@ -32,8 +36,12 @@
             echo "<tr><td colspan='4'>Nessun cliente presente.</td></tr>";
         }
         ?>
+
         </table>
-        <br><a href="index_gestore.php" class="btn-link">⬅ Torna all'area gestori</a>
+
+        <br>
+        <a href="index_gestore.php">⬅ Torna all'area gestori</a>
+
     </div>
 </body>
 </html>

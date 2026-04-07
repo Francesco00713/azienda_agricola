@@ -17,7 +17,9 @@
 </head>
 <body>
 <div class="container">
+
     <h2>Il tuo Storico Acquisti</h2>
+
     <table>
         <thead>
             <tr>
@@ -28,6 +30,7 @@
             </tr>
         </thead>
         <tbody>
+
         <?php
         $sql = "SELECT a.idAcquisto, a.dataAcquisto, a.totale, p.nome, d.quantita, pr.prezzo
                 FROM Acquisti a
@@ -41,25 +44,30 @@
 
         if ($res && $res->num_rows > 0) {
             $currentOrder = -1;
+
             while ($row = $res->fetch_assoc()) {
-                $borderStyle = ($currentOrder != -1 && $currentOrder != $row['idAcquisto']) ? "style='border-top: 3px solid #2e7d32;'" : "";
-                
-                echo "<tr $borderStyle>";
+
+                echo "<tr>";
                 echo "<td>" . ($currentOrder != $row['idAcquisto'] ? $row['dataAcquisto'] : "") . "</td>";
                 echo "<td>{$row['nome']}</td>";
                 echo "<td>{$row['quantita']}</td>";
                 echo "<td>€" . number_format($row['quantita'] * $row['prezzo'], 2) . "</td>";
                 echo "</tr>";
-                
+
                 $currentOrder = $row['idAcquisto'];
             }
+
         } else {
             echo "<tr><td colspan='4'>Non hai ancora effettuato acquisti.</td></tr>";
         }
         ?>
+
         </tbody>
     </table>
-    <br><a href="index_cliente.php" class="btn-link">⬅ Torna all'area clienti</a>
+
+    <br>
+    <a href="index_cliente.php">⬅ Torna all'area clienti</a>
+
 </div>
 </body>
 </html>

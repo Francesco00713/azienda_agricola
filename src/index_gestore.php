@@ -8,16 +8,31 @@
 </head>
 <body>
     <div class="container">
-        <h1>Area Gestore aziendale</h1>
+        <h1>AREA GESTORI</h1>
 
-        <ul>
-            <li><a href="prodotti.php">Aggiungi prodotto</a></li>
-            <li><a href="lavorazioni.php">Gestione lavorazioni</a></li>
-            <li><a href="gestione_prezzi.php">Gestione prezzi</a></li>
-            <li><a href="visualizza_clienti.php">I nostri clienti</a></li>
-        </ul>
+        <div class="home-buttons">
+            <a href="prodotti.php">
+                <button>Aggiungi prodotto</button>
+            </a>
 
-        <a href="index.php">⬅ Esci e torna alla home page</a>
+            <a href="lavorazioni.php">
+                <button>Gestione lavorazioni</button>
+            </a>
+
+            <a href="gestione_prezzi.php">
+                <button>Gestione prezzi</button>
+            </a>
+
+            <a href="visualizza_clienti.php">
+                <button>I nostri clienti</button>
+            </a>
+        </div>
+
+        <br>
+
+        <div style="text-align:center;">
+            <a href="index.php">⬅ Esci e torna alla home page</a>
+        </div>
     </div>
 </body>
 </html>
