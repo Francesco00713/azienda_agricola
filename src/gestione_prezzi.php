@@ -10,10 +10,10 @@
 </head>
 <body>
     <div class="container">
-        <h2>Gestione Prezzi Prodotti</h2>
+        <h2>Gestione prezzi</h2>
         <hr>
 
-        <h3>Aggiorna Prezzo Prodotto</h3>
+        <h3>Aggiorna prezzo</h3>
         <form method="POST">
             <label>Seleziona prodotto:</label>
             <select name="prodottoUpdate" required>
@@ -29,10 +29,8 @@
                 }
                 ?>
             </select><br><br>
-
             <label>Nuovo prezzo:</label>
             <input type="number" step="0.01" name="nuovoPrezzo" required><br><br>
-
             <button type="submit" name="updatePrezzo">Aggiorna Prezzo</button>
         </form>
 
@@ -59,10 +57,8 @@
             }
         }
         ?>
-
         <hr>
-
-        <h3>Storico Prezzi Prodotti</h3>
+        <h3>Storico prezzi</h3>
         <table>
             <tr>
                 <th>Prodotto</th>
@@ -70,32 +66,30 @@
                 <th>Data Inizio Validità</th>
                 <th>Data Fine Validità</th>
             </tr>
-
             <?php
-            $res = $conn->query("
-                SELECT p.nome, pr.prezzo, pr.dataInizioValidita, pr.dataFineValidita
-                FROM Prodotti p
-                LEFT JOIN Prezzi pr ON p.idProdotto = pr.idProdotto
-                ORDER BY p.idProdotto, pr.dataInizioValidita
-            ");
+                $res = $conn->query("
+                    SELECT p.nome, pr.prezzo, pr.dataInizioValidita, pr.dataFineValidita
+                    FROM Prodotti p
+                    LEFT JOIN Prezzi pr ON p.idProdotto = pr.idProdotto
+                    ORDER BY p.idProdotto, pr.dataInizioValidita
+                ");
 
-            if ($res->num_rows > 0) {
-                while ($row = $res->fetch_assoc()) {
-                    $dataFine = $row['dataFineValidita'] ? $row['dataFineValidita'] : '-';
+                if ($res->num_rows > 0) {
+                    while ($row = $res->fetch_assoc()) {
+                        $dataFine = $row['dataFineValidita'] ? $row['dataFineValidita'] : '-';
 
-                    echo "<tr>
-                            <td>{$row['nome']}</td>
-                            <td>€{$row['prezzo']}</td>
-                            <td>{$row['dataInizioValidita']}</td>
-                            <td>$dataFine</td>
-                          </tr>";
+                        echo "<tr>
+                                <td>{$row['nome']}</td>
+                                <td>€{$row['prezzo']}</td>
+                                <td>{$row['dataInizioValidita']}</td>
+                                <td>$dataFine</td>
+                            </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>Nessun prezzo registrato</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='4'>Nessun prezzo registrato</td></tr>";
-            }
             ?>
         </table>
-
         <br>
         <a href="index_gestore.php">⬅ Torna all'area gestori</a>
     </div>

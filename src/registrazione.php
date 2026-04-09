@@ -35,50 +35,41 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container">
-    <h2>Registrazione</h2>
-    <form method="POST">
-        <label>Nome:</label>
-        <input type="text" name="nome" required>
-
-        <label>Telefono:</label>
-        <input type="text" name="telefono" required>
-
-        <label>Email:</label>
-        <input type="text" name="email" required>
-
-        <label>Password:</label>
-        <input type="password" name="password" required>
-
-        <label>Ruolo:</label>
-        <select name="ruolo" id="ruolo" onchange="toggleCodice()">
-            <option value="cliente">Cliente</option>
-            <option value="gestore">Gestore</option>
-        </select>
-
-        <div id="codiceGestore" style="display:none;">
-            <label>Codice gestore:</label>
-            <input type="text" name="codice">
-        </div>
-
-        <button type="submit" name="registrati">Registrati</button>
-    </form>
-
-    <?php
-    if (isset($errore)) echo "<p class='error'>$errore</p>";
-    if (isset($successo)) echo "<p class='success'>$successo</p>";
-    ?>
-
-    <br>
-    <a href="index.php">⬅ Torna al login</a>
-</div>
-
-<script>
-function toggleCodice() {
-    var ruolo = document.getElementById("ruolo").value;
-    document.getElementById("codiceGestore").style.display =
-        (ruolo === "gestore") ? "block" : "none";
-}
-</script>
+    <div class="container">
+        <h2>Registrazione</h2>
+        <form method="POST">
+            <label>Nome:</label>
+            <input type="text" name="nome" required>
+            <label>Telefono:</label>
+            <input type="text" name="telefono" required>
+            <label>Email:</label>
+            <input type="text" name="email" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <label>Ruolo:</label>
+            <select name="ruolo" id="ruolo" onchange="toggleCodice()">
+                <option value="cliente">Cliente</option>
+                <option value="gestore">Gestore</option>
+            </select>
+            <div id="codiceGestore" style="display:none;">
+                <label>Codice gestore:</label>
+                <input type="text" name="codice">
+            </div>
+            <button type="submit" name="registrati">Registrati</button>
+        </form>
+        <?php
+            if (isset($errore)) echo "<p class='error'>$errore</p>";
+            if (isset($successo)) echo "<p class='success'>$successo</p>";
+        ?>
+        <br>
+        <a href="index.php">⬅ Torna al login</a>
+    </div>
+    <script>
+        function toggleCodice() {
+            var ruolo = document.getElementById("ruolo").value;
+            document.getElementById("codiceGestore").style.display =
+                (ruolo === "gestore") ? "block" : "none";
+        }
+    </script>
 </body>
 </html>

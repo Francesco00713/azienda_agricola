@@ -18,9 +18,9 @@ CREATE TABLE Prodotti (
     idProdotto INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100),
     giacenza DECIMAL(10,2),
-    unitaMisura ENUM('kg', 'pezzo', 'litro'),
-    tipo ENUM('fresco', 'riserva', 'confezionato'),
-    categoria VARCHAR(100)
+    unitaMisura ENUM('kg', 'pezzo'),
+    categoria VARCHAR(100),
+    tipo ENUM('fresco', 'riserva', 'confezionato')
 );
 
 INSERT INTO Prodotti (idProdotto, nome, giacenza, unitaMisura, tipo, categoria) VALUES 
@@ -38,8 +38,7 @@ CREATE TABLE Prezzi (
     prezzo DECIMAL(10,2),
     dataInizioValidita DATE,
     dataFineValidita DATE,
-    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto)
-        ON DELETE CASCADE
+    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto) ON DELETE CASCADE
 );
 
 INSERT INTO Prezzi (idPrezzo, idProdotto, prezzo, dataInizioValidita, dataFineValidita) VALUES 
@@ -78,7 +77,6 @@ INSERT INTO Tipi (tipo) VALUES
 CREATE TABLE Lavorazioni (
     idLavorazione INT AUTO_INCREMENT PRIMARY KEY,
     dataLavorazione DATE,
-    note VARCHAR(100),
     idLuogo INT,
     idTipo INT,
     FOREIGN KEY (idLuogo) REFERENCES Luoghi(idLuogo),
@@ -90,10 +88,8 @@ CREATE TABLE Carrello (
     idCliente INT,
     idProdotto INT,
     quantita DECIMAL(10,2),
-    FOREIGN KEY (idCliente) REFERENCES Utenti(idUtente)
-        ON DELETE CASCADE,
-    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto)
-        ON DELETE CASCADE
+    FOREIGN KEY (idCliente) REFERENCES Utenti(idUtente) ON DELETE CASCADE,
+    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto) ON DELETE CASCADE
 );
 
 CREATE TABLE Acquisti (
@@ -102,8 +98,7 @@ CREATE TABLE Acquisti (
     dataAcquisto DATE,
     totale DECIMAL(10,2),
     note VARCHAR(100),
-    FOREIGN KEY (idCliente) REFERENCES Utenti(idUtente)
-        ON DELETE CASCADE
+    FOREIGN KEY (idCliente) REFERENCES Utenti(idUtente) ON DELETE CASCADE
 );
 
 CREATE TABLE Dettaglio_acquisto (
@@ -111,8 +106,7 @@ CREATE TABLE Dettaglio_acquisto (
     quantita DECIMAL(10,2),
     idAcquisto INT,
     idProdotto INT,
-    FOREIGN KEY (idAcquisto) REFERENCES Acquisti(idAcquisto)
-        ON DELETE CASCADE,
+    FOREIGN KEY (idAcquisto) REFERENCES Acquisti(idAcquisto) ON DELETE CASCADE,
     FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto)
 );
 
@@ -128,36 +122,36 @@ CREATE TABLE usa (
     idProdotto INT,
     idLavorazione INT,
     quantitaUsata DECIMAL(10,2),
-    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto),
-    FOREIGN KEY (idLavorazione) REFERENCES Lavorazioni(idLavorazione)
+    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto) ON DELETE CASCADE,
+    FOREIGN KEY (idLavorazione) REFERENCES Lavorazioni(idLavorazione) ON DELETE CASCADE
 );
 
 CREATE TABLE detiene (
     idCarrello INT,
     idProdotto INT,
-    FOREIGN KEY (idCarrello) REFERENCES Carrello(idCarrello),
-    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto)
+    FOREIGN KEY (idCarrello) REFERENCES Carrello(idCarrello) ON DELETE CASCADE,
+    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto) ON DELETE CASCADE
 );
 
 CREATE TABLE aggiorna (
     idGestore INT,
     idPrezzo INT,
-    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtenti),
-    FOREIGN KEY (idPrezzo) REFERENCES Prezzi(idPrezzo)
+    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtente) ON DELETE CASCADE,
+    FOREIGN KEY (idPrezzo) REFERENCES Prezzi(idPrezzo) ON DELETE CASCADE
 );
 
 CREATE TABLE aggiuge (
     idGestore INT,
     idProdotto INT,
-    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtenti),
-    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto)
+    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtente) ON DELETE CASCADE,
+    FOREIGN KEY (idProdotto) REFERENCES Prodotti(idProdotto) ON DELETE CASCADE
 );
 
 CREATE TABLE compie (
     idGestore INT,
     idLavorazione INT,
-    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtenti),
-    FOREIGN KEY (idLavorazione) REFERENCES Lavorazioni(idLavorazioni)
+    FOREIGN KEY (idGestore) REFERENCES Utenti(idUtente) ON DELETE CASCADE,
+    FOREIGN KEY (idLavorazione) REFERENCES Lavorazioni(idLavorazione) ON DELETE CASCADE
 );
 
 
