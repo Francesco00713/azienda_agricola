@@ -74,8 +74,8 @@
 
                 $resItems = $conn->query("SELECT c.quantita, p.nome, pr.prezzo, p.idProdotto 
                                         FROM Carrello c 
-                                        JOIN Prodotti p ON c.idProdotto = p.idProdotto 
-                                        JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL 
+                                        INNER JOIN Prodotti p ON c.idProdotto = p.idProdotto 
+                                        INNER JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL 
                                         WHERE c.idCliente = $cliente");
 
                 echo "<div><h3>Scontrino</h3><hr>";

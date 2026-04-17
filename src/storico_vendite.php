@@ -34,10 +34,10 @@
                     (Dettaglio_acquisto.quantita * Prezzi.prezzo) AS subtotale,
                     Acquisti.totale
                 FROM Acquisti
-                JOIN Utenti ON Acquisti.idCliente = Utenti.idUtente
-                JOIN Dettaglio_acquisto ON Acquisti.idAcquisto = Dettaglio_acquisto.idAcquisto
-                JOIN Prodotti ON Dettaglio_acquisto.idProdotto = Prodotti.idProdotto
-                JOIN Prezzi ON Prodotti.idProdotto = Prezzi.idProdotto AND Prezzi.dataFineValidita IS NULL
+                INNER JOIN Utenti ON Acquisti.idCliente = Utenti.idUtente
+                INNER JOIN Dettaglio_acquisto ON Acquisti.idAcquisto = Dettaglio_acquisto.idAcquisto
+                INNER JOIN Prodotti ON Dettaglio_acquisto.idProdotto = Prodotti.idProdotto
+                INNER JOIN Prezzi ON Prodotti.idProdotto = Prezzi.idProdotto AND Prezzi.dataFineValidita IS NULL
                 ORDER BY Acquisti.idAcquisto ASC, Dettaglio_acquisto.idDettaglio ASC";
 
             $res = $conn->query($sql);

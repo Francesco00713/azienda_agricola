@@ -31,9 +31,9 @@
             <?php
                 $sql = "SELECT a.idAcquisto, a.dataAcquisto, a.totale, p.nome, d.quantita, pr.prezzo
                         FROM Acquisti a
-                        JOIN Dettaglio_acquisto d ON a.idAcquisto = d.idAcquisto
-                        JOIN Prodotti p ON d.idProdotto = p.idProdotto
-                        JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL
+                        INNER JOIN Dettaglio_acquisto d ON a.idAcquisto = d.idAcquisto
+                        INNER JOIN Prodotti p ON d.idProdotto = p.idProdotto
+                        INNER JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL
                         WHERE a.idCliente = $idCliente
                         ORDER BY a.dataAcquisto DESC, a.idAcquisto DESC";
 
