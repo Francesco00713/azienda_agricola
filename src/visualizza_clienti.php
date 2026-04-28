@@ -12,7 +12,6 @@
         <h2>Elenco clienti</h2>
         <table>
             <tr>
-                <th>ID</th>
                 <th>Nome</th>
                 <th>Telefono</th>
                 <th>Email</th>
@@ -22,7 +21,6 @@
             if ($res && $res->num_rows > 0) {
                 while ($row = $res->fetch_assoc()) {
                     echo "<tr>
-                            <td>{$row['idUtente']}</td>
                             <td>{$row['nome']}</td>
                             <td>{$row['telefono']}</td>
                             <td>{$row['email']}</td>

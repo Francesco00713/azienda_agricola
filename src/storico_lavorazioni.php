@@ -12,28 +12,30 @@
         <h2>Storico lavorazioni</h2>
         <table>
             <tr>
-                <th>ID lavorazione</th>
                 <th>Data</th>
                 <th>Gestore</th>
                 <th>Tipo lavorazione</th>
                 <th>Luogo</th>
                 <th>Prodotto realizzato</th>
                 <th>Quantità prodotta</th>
+                <th>Unità di misura</th>
                 <th>Prodotto usato</th>
                 <th>Quantità usata</th>
+                <th>Unità di misura</th>
             </tr>
         <?php
             $sql = "
             SELECT 
-                Lavorazioni.idLavorazione,
                 Lavorazioni.dataLavorazione,
                 Utenti.nome AS gestore,
                 Tipi.tipo AS tipo_lavorazione,
                 Luoghi.nome AS luogo,
                 P1.nome AS prodotto_prodotto,
                 produce.quantitaProdotta,
+                P1.unitaMisura AS um_prodotta,
                 P2.nome AS prodotto_usato,
-                usa.quantitaUsata
+                usa.quantitaUsata,
+                P2.unitaMisura AS um_usata
             FROM Lavorazioni
 
             LEFT JOIN compie ON Lavorazioni.idLavorazione = compie.idLavorazione
@@ -59,20 +61,21 @@
                     $quantitaUsata = isset($row['quantitaUsata']) ? number_format($row['quantitaUsata'], 2, '.', '') : '';
 
                     echo "<tr>
-                            <td>{$row['idLavorazione']}</td>
                             <td>{$row['dataLavorazione']}</td>
                             <td>{$row['gestore']}</td>
                             <td>{$row['tipo_lavorazione']}</td>
                             <td>{$row['luogo']}</td>
                             <td>{$row['prodotto_prodotto']}</td>
                             <td>{$quantitaProdotta}</td>
+                            <td>{$row['um_prodotta']}</td>
                             <td>{$row['prodotto_usato']}</td>
                             <td>{$quantitaUsata}</td>
+                            <td>{$row['um_usata']}</td>
                         </tr>";
                 }
 
             } else {
-                echo "<tr><td colspan='9'>Nessuna lavorazione registrata.</td></tr>";
+                echo "<tr><td colspan='11'>Nessuna lavorazione registrata.</td></tr>";
             }
         ?>
         </table>

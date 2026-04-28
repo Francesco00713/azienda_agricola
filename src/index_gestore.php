@@ -7,13 +7,16 @@
     <title>Home-Page_gestore</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container2">
         <h1>AREA GESTORI</h1>
         <div class="home-buttons">
             <a href="nuovo_prodotto.php">
-                <button>Aggiungi prodotto</button>
+                <button>Aggiungi nuovo prodotto</button>
             </a>
-            <a href="lavorazioni.php">
+            <a href="aggiorna_giacenza.php">
+                <button>Aggiorna giacenza</button>
+            </a>
+            <a href="gestione_lavorazioni.php">
                 <button>Gestione lavorazioni</button>
             </a>
             <a href="gestione_prezzi.php">
@@ -24,6 +27,9 @@
             </a>
             <a href="storico_vendite.php">
                 <button>Storico vendite</button>
+            </a>
+            <a href="storico_guadagni.php">
+                <button>Storico guadagni</button>
             </a>
             <a href="visualizza_clienti.php">
                 <button>I nostri clienti</button>

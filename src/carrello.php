@@ -5,6 +5,7 @@
         die("Devi effettuare il login!");
     }
     $cliente = $_SESSION['idUtente'];
+
     if (isset($_GET['rimuovi'])) {
         $idProdotto = (int)$_GET['rimuovi'];
         $conn->query("DELETE FROM Carrello WHERE idCliente = $cliente AND idProdotto = $idProdotto");
@@ -17,6 +18,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrello</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -36,31 +38,34 @@
                         <tr>
                             <th>Prodotto</th>
                             <th>Quantità</th>
-                            <th>Prezzo</th>
-                            <th>Totale</th>
+                            <th>Prezzo Unitario</th>
+                            <th>Subtotale</th>
                             <th>Azione</th>
                         </tr>";
+                
+                $items = []; 
                 while ($row = $res->fetch_assoc()) {
+                    $items[] = $row;
                     $sub = $row['quantita'] * $row['prezzo'];
                     $totale += $sub;
 
                     echo "<tr>
                             <td>{$row['nome']}</td>
                             <td>{$row['quantita']} {$row['unitaMisura']}</td>
-                            <td>€" . number_format($row['prezzo'], 2) . "</td>
-                            <td>€" . number_format($sub, 2) . "</td>
-                            <td><a href='?rimuovi={$row['idProdotto']}'>Rimuovi</a></td>
+                            <td>€" . number_format($row['prezzo'], 2, ',', '.') . "</td>
+                            <td>€" . number_format($sub, 2, ',', '.') . "</td>
+                            <td><a href='?rimuovi={$row['idProdotto']}' style='color:red;'>Rimuovi</a></td>
                         </tr>";
                 }
 
                 echo "<tr>
-                        <td colspan='3'><strong>Totale Complessivo</strong></td>
-                        <td colspan='2'><strong>€" . number_format($totale, 2) . "</strong></td>
+                        <td colspan='3' style='text-align:right;'><strong>Totale Complessivo</strong></td>
+                        <td colspan='2'><strong>€" . number_format($totale, 2, ',', '.') . "</strong></td>
                     </tr>
                     </table>";
 
-                echo '<form method="POST">
-                        <button type="submit" name="acquista">Conferma Acquisto</button>
+                echo '<form method="POST" style="margin-top:20px;">
+                        <button type="submit" name="acquista">Conferma e Paga</button>
                     </form>';
 
             } else {
@@ -68,8 +73,9 @@
             }
 
             if (isset($_POST['acquista']) && $totale > 0) {
-
-                $conn->query("INSERT INTO Acquisti (idCliente, dataAcquisto, totale, note) VALUES ($cliente, NOW(), $totale, '')");
+                $stmtAcquisto = $conn->prepare("INSERT INTO Acquisti (idCliente, dataAcquisto, totale, note) VALUES (?, NOW(), ?, '')");
+                $stmtAcquisto->bind_param("id", $cliente, $totale);
+                $stmtAcquisto->execute();
                 $idAcquisto = $conn->insert_id;
 
                 $resItems = $conn->query("SELECT c.quantita, p.nome, pr.prezzo, p.idProdotto 
@@ -78,26 +84,29 @@
                                         INNER JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL 
                                         WHERE c.idCliente = $cliente");
 
-                echo "<div><h3>Scontrino</h3><hr>";
+                echo "<div class='scontrino' style='background:#f9f9f9; padding:20px; border:1px solid #ddd; margin-top:20px;'>";
+                echo "<h3>Ricevuta Acquisto #$idAcquisto</h3><hr>";
 
                 while ($r = $resItems->fetch_assoc()) {
+                    $prezzoCorrente = $r['prezzo'];
+                    $qta = $r['quantita'];
+                    $idProd = $r['idProdotto'];
 
-                    $conn->query("INSERT INTO Dettaglio_acquisto (idAcquisto, idProdotto, quantita) 
-                                VALUES ($idAcquisto, {$r['idProdotto']}, {$r['quantita']})");
+                    $conn->query("INSERT INTO Dettaglio_acquisto (idAcquisto, idProdotto, prezzoUnitario, quantita) 
+                                 VALUES ($idAcquisto, $idProd, $prezzoCorrente, $qta)");
 
-                    $conn->query("UPDATE Prodotti 
-                                SET giacenza = giacenza - {$r['quantita']} 
-                                WHERE idProdotto = {$r['idProdotto']}");
+                    $conn->query("UPDATE Prodotti SET giacenza = giacenza - $qta WHERE idProdotto = $idProd");
 
-                    echo "<p>{$r['nome']} - {$r['quantita']} x €" . number_format($r['prezzo'], 2) . 
-                        " = €" . number_format($r['quantita'] * $r['prezzo'], 2) . "</p>";
+                    echo "<p>{$r['nome']} - $qta x €" . number_format($prezzoCorrente, 2, ',', '.') . 
+                         " = <strong>€" . number_format($qta * $prezzoCorrente, 2, ',', '.') . "</strong></p>";
                 }
 
                 $conn->query("DELETE FROM Carrello WHERE idCliente = $cliente");
 
                 echo "<hr>
-                    <h3>TOTALE: €" . number_format($totale, 2) . "</h3>
-                    <p class='success'>Acquisto completato!</p>
+                    <h4>TOTALE PAGATO: €" . number_format($totale, 2, ',', '.') . "</h4>
+                    <p class='success' style='color:green; font-weight:bold;'>Acquisto completato con successo!</p>
+                    <script>setTimeout(function(){ window.location.href = 'acquisti.php'; }, 5000);</script>
                     </div>";
             }
         ?>

@@ -11,6 +11,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acquisti</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -30,7 +31,7 @@
 
             while ($p = $resProd->fetch_assoc()) {
                 echo "<option value='{$p['idProdotto']}'>
-                        {$p['nome']} - €{$p['prezzo']} ({$p['giacenza']} {$p['unitaMisura']})
+                        {$p['nome']} - €" . number_format($p['prezzo'], 2, ',', '.') . " ({$p['giacenza']} {$p['unitaMisura']})
                     </option>";
             }
             ?>
@@ -40,77 +41,68 @@
         <button type="submit" name="aggiungi">Aggiungi al carrello</button>
     </form>
 
-    <hr>
-
-    <h2>Prodotti disponibili</h2>
-    <table>
-        <tr>
-            <th>Nome</th>
-            <th>Giacenza</th>
-            <th>Unità</th>
-            <th>Prezzo</th>
-        </tr>
-
     <?php
-        $res = $conn->query("
-            SELECT p.nome, p.giacenza, p.unitaMisura, pr.prezzo
-            FROM Prodotti p
-            JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL
-            WHERE p.giacenza > 0
-        ");
-
-        while ($p = $res->fetch_assoc()) {
-            echo "<tr>
-                    <td>{$p['nome']}</td>
-                    <td>{$p['giacenza']}</td>
-                    <td>{$p['unitaMisura']}</td>
-                    <td>€{$p['prezzo']}</td>
-                </tr>";
-        }
-        ?>
-        </table>
-    <?php
-
     if (isset($_POST['aggiungi'])) {
         $prodotto = (int)$_POST['prodotto'];
         $quantita = (float)$_POST['quantita'];
+        
         $res = $conn->query("SELECT giacenza FROM Prodotti WHERE idProdotto = $prodotto");
-
-        if ($res->num_rows == 0) {
-            echo "<p class='error'>Prodotto non trovato!</p>";
-            exit();
-        }
-
         $row = $res->fetch_assoc();
 
-        if ($row['giacenza'] < $quantita) {
-            echo "<p class='error'>Quantità non disponibile!</p>";
+        if (!$row || $row['giacenza'] < $quantita) {
+            echo "<p class='error'>Quantità non disponibile o prodotto inesistente!</p>";
         } else {
-            $check = $conn->query("
-                SELECT * FROM Carrello 
-                WHERE idCliente = $idCliente AND idProdotto = $prodotto
-            ");
+            $check = $conn->query("SELECT * FROM Carrello WHERE idCliente = $idCliente AND idProdotto = $prodotto");
 
             if ($check->num_rows > 0) {
-                $conn->query("
-                    UPDATE Carrello
-                    SET quantita = quantita + $quantita
-                    WHERE idCliente = $idCliente AND idProdotto = $prodotto
-                ");
+                $conn->query("UPDATE Carrello SET quantita = quantita + $quantita WHERE idCliente = $idCliente AND idProdotto = $prodotto");
             } else {
-                $conn->query("
-                    INSERT INTO Carrello (idCliente, idProdotto, quantita)
-                    VALUES ($idCliente, $prodotto, $quantita)
-                ");
+                $conn->query("INSERT INTO Carrello (idCliente, idProdotto, quantita) VALUES ($idCliente, $prodotto, $quantita)");
             }
 
-            echo "<p class='success'>Prodotto aggiunto al carrello!</p>";
-            echo "<a href='carrello.php'>Vai al carrello</a>";
+            echo "<p class='success'>Prodotto aggiunto al carrello! <a href='carrello.php'>Vai al carrello</a></p>";
         }
     }
     ?>
+
+    <hr>
+    <h2>Prodotti disponibili</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Giacenza</th>
+                <th>Unità</th>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Prezzo Attuale</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            $res = $conn->query("
+                SELECT p.nome, p.giacenza, p.unitaMisura, p.categoria, p.tipo, pr.prezzo
+                FROM Prodotti p
+                JOIN Prezzi pr ON p.idProdotto = pr.idProdotto AND pr.dataFineValidita IS NULL
+                WHERE p.giacenza > 0
+            ");
+
+            while ($p = $res->fetch_assoc()) {
+                echo "<tr>
+                        <td>{$p['nome']}</td>
+                        <td>{$p['giacenza']}</td>
+                        <td>{$p['unitaMisura']}</td>
+                        <td>{$p['categoria']}</td>
+                        <td>{$p['tipo']}</td>
+                        <td>€" . number_format($p['prezzo'], 2, ',', '.') . "</td>
+                    </tr>";
+            }
+        ?>
+        </tbody>
+    </table>
+    
     <br><br>
-    <a href="index_cliente.php">⬅ Torna all'area clienti</a>
+    <a href="index_cliente.php" class="btn">⬅ Torna all'area clienti</a>
     </div>
 </body>
 </html>

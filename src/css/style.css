@@ -29,7 +29,7 @@ body{
     animation:fadeIn 0.5s ease;
 }
 
-.storico {
+.container2{
     width:100%;
     max-width: 1000px;
     background:white;
@@ -39,6 +39,45 @@ body{
     0 20px 40px rgba(0,0,0,0.12),
     0 5px 15px rgba(0,0,0,0.05);
     animation:fadeIn 0.5s ease;
+}
+
+.storico {
+    width:100%;
+    max-width: 1200px;
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:
+    0 20px 40px rgba(0,0,0,0.12),
+    0 5px 15px rgba(0,0,0,0.05);
+    animation:fadeIn 0.5s ease;
+}
+
+.avviso{
+    background: #e3f2fd; 
+    padding: 15px; 
+    margin-bottom: 20px;
+    font-size: 0.8em; 
+    color: #555;
+}
+
+.avviso h1{
+    margin: 5px 0; 
+    color: #0d47a1;
+}
+
+.row-ordine {
+    background-color: #f2f2f2; 
+    font-weight: bold;
+}
+
+.separatore-ordine {
+    border-top: 2px solid #333;
+}
+
+.totale-box {
+    background-color: #e8f5e9; 
+    font-weight: bold;
 }
 
 /* TITOLI */

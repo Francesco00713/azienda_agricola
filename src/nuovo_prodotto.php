@@ -1,6 +1,6 @@
 <?php
-session_start();
-include "db.php";
+    session_start();
+    include "db.php";
 ?>
 
 <!DOCTYPE html>
@@ -54,44 +54,43 @@ include "db.php";
 
                 $idGestore = $_SESSION['idUtente'] ?? 1; 
 
-                $checkProd = $conn->query("SELECT idProdotto, categoria FROM Prodotti WHERE nome = '$nome' AND tipo = '$tipo' AND unitaMisura = '$unita'");
+                $checkProd = $conn->query("SELECT idProdotto FROM Prodotti WHERE nome = '$nome' AND tipo = '$tipo' AND unitaMisura = '$unita'");
 
                 if ($checkProd->num_rows > 0) {
-                    $rowProd = $checkProd->fetch_assoc();
-                    $idEsistente = $rowProd['idProdotto'];
-                    $categoriaEsistente = $rowProd['categoria'];
-
-                    $checkPrezzo = $conn->query("SELECT prezzo FROM Prezzi WHERE idProdotto = $idEsistente AND dataFineValidita IS NULL");
-                    
-                    $prezzoAttuale = 0;
-                    if ($checkPrezzo->num_rows > 0) {
-                        $prezzoAttuale = floatval($checkPrezzo->fetch_assoc()['prezzo']);
-                    }
-
-                    if ($categoria != $categoriaEsistente) {
-                        echo "<p class='error'>Attenzione: Il prodotto è già presente ma appartiene a una categoria diversa ($categoriaEsistente). <br> 
-                            Impossibile aggiungere la giacenza: le caratteristiche non corrispondono.</p>";
-                    } elseif ($prezzoNuovo != $prezzoAttuale) {
-                        echo "<p class='error'>Attenzione: Il prodotto è già presente ma con un prezzo diverso (€" . number_format($prezzoAttuale, 2) . "). <br> 
-                            Modifica prima il prezzo del prodotto dalla gestione prezzi e poi riprova ad aggiungere la giacenza.</p>";
-                    } else {
-                        if ($conn->query("UPDATE Prodotti SET giacenza = giacenza + $giacenza WHERE idProdotto = $idEsistente")) {
-                            echo "<p class='success'>Prodotto già presente: giacenza aggiornata con successo!</p>";
-                        } else {
-                            echo "<p class='error'>Errore nell'aggiornamento: " . $conn->error . "</p>";
-                        }
-                    }
+                    echo "<div class='info-box' style='background: #e1f5fe; border: 1px solid #01579b; padding: 15px; margin: 10px 0; border-radius: 5px;'>
+                            <p style='margin: 0;'>
+                                Il prodotto <strong>$nome</strong> è già presente nel database.<br>
+                                Se desideri modificare la sua giacenza, utilizza la sezione 
+                                <a href='aggiorna_giacenza.php' style='font-weight: bold; color: #01579b;'>Aggiorna Giacenza</a>.
+                            </p>
+                          </div>";
                 } else {
                     $sql = "INSERT INTO Prodotti (nome, giacenza, unitaMisura, categoria, tipo) 
                             VALUES ('$nome', $giacenza, '$unita', '$categoria', '$tipo')";
 
                     if ($conn->query($sql)) {
                         $idProdotto = $conn->insert_id;
+                        
                         $conn->query("INSERT INTO Prezzi (idProdotto, prezzo, dataInizioValidita, dataFineValidita) 
                                     VALUES ($idProdotto, $prezzoNuovo, NOW(), NULL)");
+                        
                         $conn->query("INSERT INTO aggiuge (idGestore, idProdotto) VALUES ($idGestore, $idProdotto)");
 
-                        echo "<p class='success'>Nuovo prodotto e prezzo aggiunti con successo!</p>";
+                        if ($giacenza > 0) {
+                            $resTipo = $conn->query("SELECT idTipo FROM Tipi WHERE tipo = 'Raccolta' LIMIT 1");
+                            if ($resTipo->num_rows > 0) {
+                                $idTipoRaccolta = $resTipo->fetch_assoc()['idTipo'];
+                                // Se è Raccolta (idTipo 1), il luogo è Campi Aziendali (id 2)
+                                $idLuogo = ($idTipoRaccolta == 1) ? 2 : 1;
+
+                                $conn->query("INSERT INTO Lavorazioni (dataLavorazione, idLuogo, idTipo) VALUES (NOW(), $idLuogo, $idTipoRaccolta)");
+                                $idLavorazione = $conn->insert_id;
+
+                                $conn->query("INSERT INTO compie (idGestore, idLavorazione) VALUES ($idGestore, $idLavorazione)");
+                                $conn->query("INSERT INTO produce (idProdotto, idLavorazione, quantitaProdotta) VALUES ($idProdotto, $idLavorazione, $giacenza)");
+                            }
+                        }
+                        echo "<p class='success'>Nuovo prodotto inserito e operazione di raccolta registrata!</p>";
                     } else {
                         echo "<p class='error'>Errore: " . $conn->error . "</p>";
                     }
@@ -101,7 +100,6 @@ include "db.php";
         <h2>Lista prodotti</h2>
         <table>
         <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Giacenza</th>
             <th>Unità di misura</th>
@@ -121,7 +119,6 @@ include "db.php";
                 while ($row = $res->fetch_assoc()) {
                     $prezzo = $row['prezzo'] !== null ? "€" . number_format($row['prezzo'], 2) : "-";
                     echo "<tr>
-                            <td>{$row['idProdotto']}</td>
                             <td>{$row['nome']}</td>
                             <td>{$row['giacenza']}</td>
                             <td>{$row['unitaMisura']}</td>
@@ -131,7 +128,7 @@ include "db.php";
                         </tr>";
                 }
             } else {
-                echo "<tr><td colspan='7'>Nessun prodotto presente</td></tr>";
+                echo "<tr><td colspan='6'>Nessun prodotto presente</td></tr>";
             }
         ?>
         </table>
